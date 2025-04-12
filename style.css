@@ -1,6 +1,108 @@
+html{
+  --color-accent: oklch(0.6 0.1521 245.65);
+  accent-color: var(--color-accent);
+}
 body {
     /* Set line height to 1.5 times the font size
          and use the OS’s UI font as the website font
        */
     font: 100%/1.5 system-ui;
+    max-width: 100ch;
+    margin-inline: max(1em, (100% - 100ch) / 2);
   }
+nav {
+  display: flex;
+  margin-bottom: 0.5em;
+  border-bottom-width: 1px;
+  border-bottom-style:solid;
+  border-bottom-color:oklch(80% 3% 200)
+}
+a {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  padding:0.5em;
+}
+a.current{
+  border-bottom-style:solid;
+  border-bottom-width: 0.4em;
+  border-bottom-color:oklch(80% 3% 200);
+  font-weight:bold;
+}
+a:hover{
+  border-bottom-style:solid;
+  border-bottom-width: 0.4em;
+  border-bottom-color:var(--color-accent);
+  background-color: oklch(from var(--color-accent) 95% 5% h)
+}
+
+form{
+  display:grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+}
+input, button, textarea, label {
+  font: inherit;
+}
+label{
+  display: contents;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+button{
+  grid-column: 1 / -1;
+}
+
+.projects{
+  display:grid;
+  grid-template-columns: repeat(auto-fill,minmax(15em, 1fr));
+}
+article{
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  margin: 0.5em;
+}
+h2{
+  margin: 0;
+}
+h1{
+  font-size:4em;
+}
+h1,h2,h3,h4,h5,h6{
+  line-height: 1.1;
+  text-wrap: balance;
+}
+date {
+  display: block;
+  font-style: italic;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+p {
+  margin: 0;
+  color: #555;
+}
+section {
+  margin-bottom: 30px;
+}
+.side {
+  grid-column: 2 / 3;
+}
+.main {
+  grid-column: 1/2;
+}
+.CV{
+  display: grid;
+}
+@media (max-width: 800px) {
+  .side, .main {
+      grid-column: 1 / -1;
+  }
+  .main {
+      grid-row: 1 / 2; /* Main content appears first */
+  }
+  .side {
+      grid-row: 2 / 3; /* Sidebar follows */
+  }
+}
