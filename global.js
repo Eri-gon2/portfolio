@@ -12,7 +12,7 @@ function $$(selector, context = document) {
 
 // currentLink?.classList.add('current')
 
-const BASE_PATH = "eri-gon2.github.io";       
+const BASE_PATH = "/";
 
 let pages = [
   {url : '', title: 'home'},
