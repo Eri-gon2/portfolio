@@ -13,8 +13,8 @@ function $$(selector, context = document) {
 // currentLink?.classList.add('current')
 
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-  ? "/"                  // Local server
-  : "eri-gon2.github.io";         // GitHub Pages repo name
+  ? "/"              
+  : "eri-gon2.github.io";       
 
 let pages = [
   {url : '', title: 'home'},
@@ -30,7 +30,51 @@ document.body.prepend(nav);
 for (let p of pages) {
   let url = p.url;
   let title = p.title;
+  let a = document.createElement('a');
   url = !url.startsWith('http') ? BASE_PATH + url : url;
-  nav.insertAdjacentHTML('beforeend', `<a href="${url}">${title}</a>`);
 
+  a.href = url;
+  a.textContent = title;
+  a.classList.toggle(
+    'current',
+    a.host === location.host && a.pathname === location.pathname
+  );
+
+  if (a.host !== location.host) {
+    a.target = "_blank";
+  }
+  nav.append(a);
+
+}
+
+document.body.insertAdjacentHTML(
+  'afterbegin',
+  `
+  <label class="color-scheme">
+    Theme:
+    <select>
+      <option value="light dark">Automatic</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </label>
+  `
+);
+
+const select = document.querySelector('.color-scheme select');
+
+function setColorScheme(scheme) {
+  document.documentElement.style.setProperty('color-scheme', scheme);
+  select.value = scheme;
+}
+
+select.addEventListener('input', (event) => {
+  const value = event.target.value;
+  setColorScheme(value);
+  localStorage.colorScheme = value;
+});
+
+// Load user preference on page load
+if ("colorScheme" in localStorage) {
+  setColorScheme(localStorage.colorScheme);
 }
