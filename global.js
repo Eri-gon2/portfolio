@@ -12,9 +12,7 @@ function $$(selector, context = document) {
 
 // currentLink?.classList.add('current')
 
-const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-  ? "/"              
-  : "eri-gon2.github.io";       
+const BASE_PATH = "eri-gon2.github.io";       
 
 let pages = [
   {url : '', title: 'home'},
