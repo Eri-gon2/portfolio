@@ -12,7 +12,7 @@ function $$(selector, context = document) {
 
 // currentLink?.classList.add('current')
 
-const BASE_PATH = "/";
+const BASE_PATH = "/portfolio/";
 
 let pages = [
   {url : '', title: 'home'},
