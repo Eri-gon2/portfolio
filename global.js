@@ -1,6 +1,6 @@
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
 ? "/"
-: "/eri-gon2.github.io/";
+: "/";
 
 let pages = [
   { url: '', title: 'home' },
