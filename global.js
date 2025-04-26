@@ -1,6 +1,6 @@
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
 ? "/"
-: "/portfolio/";
+: "/Eri-gon2.github.io/";
 
 let pages = [
   { url: '', title: 'home' },
@@ -16,15 +16,17 @@ document.body.prepend(nav);
 for (let p of pages) {
   let url = p.url;
   let title = p.title;
-  let a = document.createElement('a');
-
   url = !url.startsWith('http') ? BASE_PATH + url : url;
+
+  let a = document.createElement('a');
   a.href = url;
   a.textContent = title;
+  nav.append(a);
 
-  const currentPath = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
-  const linkPath = new URL(a.href).pathname;
-  a.classList.toggle('current', currentPath === linkPath);
+  a.classList.toggle(
+    'current',
+    a.host === location.host && a.pathname === location.pathname,
+  );
 
   if (a.host !== location.host) {
     a.target = "_blank";
