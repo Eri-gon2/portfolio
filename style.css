@@ -123,3 +123,29 @@ section {
 .color-scheme select {
   font-family: inherit;
 }
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-family: sans-serif;
+  max-width: 600px;
+  margin: 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#profile-stats dt,
+#profile-stats dd {
+  margin: 0;
+}
+
+#profile-stats dt {
+  font-weight: bold;
+  grid-row: 1;
+}
+
+#profile-stats dd {
+  grid-row: 2;
+}
