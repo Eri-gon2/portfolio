@@ -152,22 +152,22 @@
     </header>
 
     <main>
-      <h2>Proposition: [STATE PROPOSITION]</h2>
+      <h2>Proposition: More abortion availability results in more abortions among younger teens.</h2>
 
       <section>
         <h3>FOR the Proposition</h3>
 
         <figure>
-          <img src="IMAGE_FILENAME" alt="" />
-          <figcaption>BRIEF CAPTION HERE.</figcaption>
+          <img src="For.png" alt="" />
+          <figcaption>Abortion rates in 2017 for States binned based on the number of abortion providers</figcaption>
         </figure>
 
         <p>Design Decisions and Rationale:</p>
 
         <ul>
-          <li>RATIONALE_1</li>
-          <li>RATIONALE_2</li>
-          <li>RATIONALE_3</li>
+          <li>+0.5 Compared Abortion rates per 1,000 women between age groups</li>
+          <li>-2 Dropped all rows with 'unavailable' in any row</li>
+          <li>+0.5 Aggregated the data into no of abortion providers bins. Because the distribution of the states were logarithmic, I chose the bins that felt the most balanced for each group. </li>
         </ul>
       </section>
 
@@ -175,23 +175,33 @@
         <h3>AGAINST the Proposition</h3>
 
         <figure>
-          <img src="IMAGE_FILENAME" alt="" />
-          <figcaption>BRIEF CAPTION HERE.</figcaption>
+          <img src="against .png" alt="" />
+          <figcaption>Proportion of 19-15 less abortions in 2017 for States binned based on the number of abortion providers.</figcaption>
         </figure>
 
         <p>Design Decisions and Rationale:</p>
 
         <ul>
-          <li>RATIONALE_1</li>
-          <li>RATIONALE_2</li>
-          <li>RATIONALE_3</li>
+          <li>-1 Each state got out the Abortion counts for 15-17, 15-19, and less than 15. This might be more deceptive, because some states just have larger populations while others have less population</li>
+          <li>-0.5 Dropped the rows with 'unavailable' entries. This was done out of convenience</li>
+          <li>+1 Using the counts, calculate the percentage of each age group for each state. Calculating the percentage is earnest as it normalizes the stat to be comparable for each state</li>
+          <li>+0.5 Because the less than 15 count is only available for counts and not porportions, we use the aggregate mean of the calculated less than 15 percentage among the states based on the amount of abortion providers in the state.</li>
+          <li>+0.5 I binned the providers by log in order to have a roughly the same amount of states per bin.</li>
+          <li>-1.5 After graphing both the 15-17 and the less than 15 in a bar chart, I chose only the less than 15, as it created the best visual for against the proposition. Only the less than 15 worked for against the proposition.</li>
         </ul>
       </section>
 
       <section>
         <h2>Final Reflection</h2>
 
-        <p>[WRITE FINAL REFLECTION PARAGRAPHS HERE.]</p>
+        <p>I found a lot of difficulty with this dataset. For both visualizations, I did a log based bin, where the first bins are small that gradually increase in size in order to have the same amount of states for each bin.
+          Creating a proposition that worked well was hard, because the data was extremely inconsistent and sparse. For example, the rates of Aboritons between ages of 2017 does not have less than 15 rate at all. 
+          Furthermore, many of the states had 'unavailable' entries, which made it hard to compare the states. I ended up dropping all of the unavailable entries, which made the data much more consistent.
+          The story is not black and white and much more nuanced. I found that in order to paint a clear picture for both sides, I was forced to generate multiple visualizations and only choose the ones that told a story. 
+          This highlights how all visualizations are biased through significance. The graph would only be selected to be published or even shown if it has a story to tell. In this sense, all graphs need to be taken under a critical lense.
+          Through the project, I define "ethical visualization" as a visualization that clearly explains how the visual was made and the data if came from. By making all the processes available, it would be possible for readers to apply a critical lense to the graph. 
+          
+        </p>
       </section>
     </main>
   </body>
