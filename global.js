@@ -103,7 +103,12 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
   article.appendChild(heading);
   article.appendChild(image);
   article.appendChild(description);
-
+  
+  // include the year below the description
+  const year = document.createElement('p');
+  year.textContent = `Year: ${project.year}`;
+  year.classList.add('year');
+  article.appendChild(year);
   containerElement.appendChild(article);
   });
 }
