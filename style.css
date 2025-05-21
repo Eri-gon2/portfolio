@@ -215,3 +215,130 @@ path {
     fill: var(--color);
   }
 }
+#stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-family: sans-serif;
+  max-width: 600px;
+  margin: 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+#stats dt,
+#stats dd {
+  margin: 0;
+}
+
+#stats dt {
+  font-weight: bold;
+  grid-row: 1;
+}
+
+#stats dd {
+  grid-row: 2;
+}
+.gridlines {
+  /* make transparent*/
+  opacity: 0.3;
+}
+
+dl.info {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5em 1em;
+  margin: 0;
+}
+
+dl.info dt {
+  margin: 0;
+  font-weight: normal;
+  color: #666; /* Less prominent label */
+}
+
+dl.info dd {
+  margin: 0;
+  font-weight: bold;
+  color: #000; /* More prominent value */
+}
+
+.tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background: rgba(0, 0, 0, 0.05);
+  color: #fff;
+  padding: 0.5em 1em;
+  border-radius: 0.25em;
+  z-index: 1000;
+  max-width: 300px;
+}
+
+circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+  /* @starting-style {
+    r: 0;
+  } */
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
+
+dl.info {
+  /* ... other styles ... */
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8; /* 5 + 3 */
+  }
+}
+
+.selection {
+  fill-opacity: 0.1;
+  stroke: black;
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
+circle.selected {
+  fill: #ff6b6b;
+}
+
+#language-breakdown.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 400px;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#language-breakdown.stats dt {
+  font-weight: 600;
+  text-align: right;
+  color: #444;
+}
+
+#language-breakdown.stats dd {
+  margin: 0;
+  text-align: left;
+  color: #666;
+}
