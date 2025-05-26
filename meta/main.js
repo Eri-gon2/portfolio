@@ -47,8 +47,6 @@ return d3
 }
 
 function renderCommitInfo(data, commits) {
-    // Remove existing stats
-    d3.select('#stats').selectAll('dl').remove();
     // Create the dl element
     const dl = d3.select('#stats').append('dl').attr('class', 'stats');
   
@@ -71,8 +69,7 @@ function renderCommitInfo(data, commits) {
   
 let data = await loadData();
 let commits = processCommits(data);
-let filteredCommits = commits;
-renderCommitInfo(data, filteredCommits);
+renderCommitInfo(data, commits);
 
 const fileLengths = d3.rollups(
   data,
@@ -90,9 +87,35 @@ const workByPeriod = d3.rollups(
 
 const maxPeriod = d3.greatest(workByPeriod, (d) => d[1])?.[0];
 
-function updateScatterPlot(data, commits) {
+function updateScatterPlot(data, filteredCommits) {
+  // Put all the JS code of Steps inside this function
+  // Sort commits by total lines in descending order
+  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+
+  const [minLines, maxLines] = d3.extent(filteredCommits, (d) => d.totalLines);
+  const rScale = d3
+    .scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([5, 30])
   const width = 1000;
   const height = 600;
+  d3.select('svg').remove(); // Remove existing SVG element
+  const svg = d3
+    .select('#chart')
+    .append('svg')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .style('overflow', 'visible');
+  xScale = d3
+    .scaleTime()
+    .domain(d3.extent(filteredCommits, (d) => d.datetime))
+    .range([0, width])
+    .nice();
+
+  yScale = d3.scaleLinear().domain([0, 24]).range([height, 0]);
+  
+  svg.selectAll('g').remove(); // Remove existing groups
+  const dots = svg.append('g').attr('class', 'dots');
+
   const margin = { top: 10, right: 10, bottom: 30, left: 20 };
   const usableArea = {
     top: margin.top,
@@ -102,50 +125,63 @@ function updateScatterPlot(data, commits) {
     width: width - margin.left - margin.right,
     height: height - margin.top - margin.bottom,
   };
-
-  const svg = d3.select('#chart').select('svg');
-
-  xScale = d3
-    .scaleTime()
-    .domain(d3.extent(filteredCommits, (d) => d.datetime))
-    .range([0, width])
-    .nice();
   
-  xScale = xScale.domain(d3.extent(commits, (d) => d.datetime));
+  // Update scales with new ranges
+  xScale.range([usableArea.left, usableArea.right]);
+  yScale.range([usableArea.bottom, usableArea.top]);
+  // Add gridlines BEFORE the axes
+  const gridlines = svg
+    .append('g')
+    .attr('class', 'gridlines')
+    .attr('transform', `translate(${usableArea.left}, 0)`);
 
-  const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
-
+  // Create gridlines as an axis with no labels and full-width ticks
+  gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
+  // Create the axes
   const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3
+    .axisLeft(yScale)
+    .tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');
 
-  // CHANGE: we should clear out the existing xAxis and then create a new one.
+  // Add X axis
   svg
     .append('g')
     .attr('transform', `translate(0, ${usableArea.bottom})`)
     .call(xAxis);
 
-  const dots = svg.select('g.dots');
+  // Add Y axis
+  svg
+    .append('g')
+    .attr('transform', `translate(${usableArea.left}, 0)`)
+    .call(yAxis);
 
-  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+  // create brush
+  svg.call(d3.brush().on('start brush end', brushed));
+
+  // Raise dots and everything after overlay
+  svg.selectAll('.dots, .overlay ~ *').raise();
+
+  dots.selectAll('circle').remove(); // Remove existing circles
+
   dots
     .selectAll('circle')
-    .data(sortedCommits)
+    .data(filteredCommits)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', (d) => rScale(d.totalLines))
+    .style('opacity', 0.7) // add transparency to overlapping dots
     .attr('fill', 'steelblue')
-    .style('fill-opacity', 0.7) // Add transparency for overlapping dots
-    .on('mouseenter', (event, commit) => {
+    .on('mouseover', (event, commit) => {
       d3.select(event.currentTarget).style('fill-opacity', 1); // Full opacity on hover
       renderTooltipContent(commit);
       updateTooltipVisibility(true);
       updateTooltipPosition(event);
     })
     .on('mouseleave', (event) => {
-      d3.select(event.currentTarget).style('fill-opacity', 0.7);
+      d3.select(event.currentTarget).style('fill-opacity;', 0.7);
       updateTooltipVisibility(false);
-    });
+    })
 }
 
 updateScatterPlot(data, commits);
@@ -258,6 +294,7 @@ selectedTime.textContent = commitMaxTime.toLocaleString();
 //selectedTime.textContent = timeScale.invert(commitProgress).toLocaleString();
 const timeSlider = document.getElementById('time-slider');
 timeSlider.addEventListener('input', updateTimeDisplay);
+let filteredCommits;
 function filterCommitsByTime() {
   console.log('commitMax:', commitMaxTime.toLocaleString());
   filteredCommits = commits.filter((d) => {
@@ -272,28 +309,5 @@ function updateTimeDisplay() {
   filterCommitsByTime(); // filters by time and assign to some top-level variable.
   console.log('filteredCommits:', filteredCommits);
   updateScatterPlot(data, filteredCommits);
-  updateFileDisplay();
-  renderCommitInfo(data, filteredCommits);
 }
-
-function updateFileDisplay() {
-  let lines = filteredCommits.flatMap((d) => d.lines);
-  let files = [];
-  files = d3
-    .groups(lines, (d) => d.file)
-    .map(([name, lines]) => {
-      return { name, lines };
-    });
-  d3.select('.files').selectAll('div').remove(); // don't forget to clear everything first so we can re-render
-  let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
-  filesContainer.append('dt').append('code').text(d => d.name); // TODO
-  filesContainer.append('dd')
-                .selectAll('div')
-                .data(d => d.lines)
-                .enter()
-                .append('div')
-                .attr('class', 'line')
-}
-updateFileDisplay();
-
 
