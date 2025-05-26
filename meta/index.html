@@ -24,19 +24,26 @@
         />
         <time id = 'selectedTime'>hi</time>
     </label>
-    <div id="chart"></div>
-    <dl id="commit-tooltip" class="info tooltip" hidden>
-        <dt>Commit</dt>
-        <dd>
-          <a href="" id="commit-link" target="_blank"></a>
-        </dd>
-      
-        <dt>Date</dt>
-        <dd id="commit-date"></dd>
-      
-        <!-- Add: Time, author, lines edited -->
-    </dl>
-    <p id="selection-count">No commits selected</p>
-    <dl id="language-breakdown" class="stats"></dl>
+    <div id="stats"></div>
+    <div id = "scrolly-1">
+      <div id="scatter-story"></div>
+      <div id = "scatter-plot">
+        <div id="chart"></div>
+        <dl id="commit-tooltip" class="info tooltip" hidden>
+            <dt>Commit</dt>
+            <dd>
+              <a href="" id="commit-link" target="_blank"></a>
+            </dd>
+          
+            <dt>Date</dt>
+            <dd id="commit-date"></dd>
+          
+            <!-- Add: Time, author, lines edited -->
+        </dl>
+        <p id="selection-count">No commits selected</p>
+        <dl id="language-breakdown" class="stats"></dl>
+      </div>
+    </div>
+    <dl class = "files"></dl>
 </body>
 </html>
